@@ -67,9 +67,8 @@ app.delete("/api/persons/:id", (request, response) => {
 })
 
 const generateId = () => {
-  id = Math.floor(Math.random() * 1000)
-  string_id = id.toString()
-  console.log(string_id, "string_id")
+  const id = Math.floor(Math.random() * 1000)
+  const string_id = id.toString()
   return string_id
 }
 
