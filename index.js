@@ -1,38 +1,38 @@
-require("dotenv").config()
-const express = require("express")
-const Phonebook = require("./models/person")
-var morgan = require("morgan")
+require('dotenv').config()
+const express = require('express')
+const Phonebook = require('./models/person')
+var morgan = require('morgan')
 
 const app = express()
 
 const requestLogger = (request, response, next) => {
-  console.log("Method:", request.method)
-  console.log("Path:  ", request.path)
-  console.log("Body:  ", request.body)
-  console.log("---")
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
   next()
 }
 
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
-  if (error.name === "CastError") {
-    return response.status(400).send({ error: "malformatted id" })
-  } else if (error.name === "ValidationError") {
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message })
   }
 
   next(error)
 }
 
-app.use(morgan("tiny"))
-const cors = require("cors")
+app.use(morgan('tiny'))
+const cors = require('cors')
 app.use(cors())
-app.use(express.static("dist"))
+app.use(express.static('dist'))
 app.use(express.json())
 app.use(requestLogger)
 
-app.get("/info", (request, response) => {
+app.get('/info', (request, response) => {
   Phonebook.find({}).then((persons) => {
     response.send(`
       <h1>Phonebook has info for ${persons.length} people</h1>
@@ -41,7 +41,7 @@ app.get("/info", (request, response) => {
   })
 })
 
-app.get("/api/persons", (request, response, next) => {
+app.get('/api/persons', (request, response, next) => {
   Phonebook.find({})
     .then((persons) => {
       response.json(persons)
@@ -49,7 +49,7 @@ app.get("/api/persons", (request, response, next) => {
     .catch((error) => next(error))
 })
 
-app.get("/api/persons/:id", (request, response, next) => {
+app.get('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
   Phonebook.findById(id)
     .then((person) => {
@@ -62,17 +62,17 @@ app.get("/api/persons/:id", (request, response, next) => {
     .catch((error) => next(error))
 })
 
-app.delete("/api/persons/:id", (request, response, next) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
   Phonebook.findByIdAndDelete(id)
-    .then((result) => response.status(204).end())
+    .then(() => response.status(204).end())
     .catch((error) => next(error))
 })
 
-app.post("/api/persons", (request, response, next) => {
+app.post('/api/persons', (request, response, next) => {
   const { name, number } = request.body
-  if (!name) return response.status(400).json({ error: "name is missing" })
-  if (!number) return response.status(400).json({ error: "number is missing" })
+  if (!name) return response.status(400).json({ error: 'name is missing' })
+  if (!number) return response.status(400).json({ error: 'number is missing' })
 
   const person = new Phonebook({ name, number })
   person
@@ -81,9 +81,7 @@ app.post("/api/persons", (request, response, next) => {
     .catch((error) => next(error))
 })
 
-app.put("/api/persons/:id", (request, response, next) => {
-  console.log("PUT handler — path:", request.path, "params:", request.params)
-  console.log(request.params.id, "ID IS HERE")
+app.put('/api/persons/:id', (request, response, next) => {
   const { name, number } = request.body
 
   Phonebook.findById(request.params.id)
@@ -103,7 +101,7 @@ app.put("/api/persons/:id", (request, response, next) => {
 })
 
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: "unknown endpoint" })
+  response.status(404).send({ error: 'unknown endpoint' })
 }
 
 app.use(unknownEndpoint)

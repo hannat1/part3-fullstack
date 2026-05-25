@@ -7,7 +7,8 @@
     "dev": "nodemon index.js",
     "test": "echo \\\\\\\"Error: no test specified\\\\\\\" && exit 1",
     "build:ui": "rm -rf dist && cd ../fullstack-repo/part2/puhelinluettelo/ && npm run build && cp -r dist ../../../part3-fullstack/",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
+    "lint": "eslint ."
   },
   "author": "Hanna",
   "license": "MIT",
@@ -16,11 +17,15 @@
     "cors": "^2.8.5",
     "dotenv": "^17.4.2",
     "express": "^4.21.2",
+    "globals": "^17.6.0",
     "mongodb": "^6.13.0",
     "mongoose": "^8.23.1",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "eslint": "^10.4.0",
     "nodemon": "^3.1.9"
   }
 }
